@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+    mongo:
+        image: mongo
+        container_name: mongodb
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+        ports:
+            - 8081:27017
+        volumes:
+            - .dbdata:/data/db
+
+    suchon_site:
+        depends_on: 
+            - mongo
+        container_name: suchon_site
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        # restart: always
+        env_file: 
+            - .env
+        ports: 
+            - 3000:3000
